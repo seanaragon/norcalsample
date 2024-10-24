@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Form</title>
+</head>
+<body>
+    <h2>Real Estate Inquiry Form</h2>
+    <form id="realEstateForm">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="phone">Phone:</label><br>
+        <input type="tel" id="phone" name="phone" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="city">City:</label><br>
+        <input type="checkbox" name="city" value="San Francisco"> San Francisco<br>
+        <input type="checkbox" name="city" value="San Jose"> San Jose<br>
+        <input type="checkbox" name="city" value="Sacramento"> Sacramento<br>
+        <input type="checkbox" name="city" value="Oakland"> Oakland<br><br>
+
+        <label for="bed">Bedrooms:</label><br>
+        <input type="number" id="bed" name="bed" required><br><br>
+
+        <label for="baths">Bathrooms:</label><br>
+        <input type="number" id="baths" name="baths" required><br><br>
+
+        <label for="sqft">Square Footage:</label><br>
+        <input type="number" id="sqft" name="sqft" required><br><br>
+
+        <label for="budget">Budget:</label><br>
+        <input type="number" id="budget" name="budget" required><br><br>
+
+        <label for="timeline">Timeline:</label><br>
+        <input type="text" id="timeline" name="timeline" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('realEstateForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            const data = {};
+            formData.forEach((value, key) => {
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            fetch('https://script.google.com/macros/s/AKfycbzK_2Foy4PQcHHD_yEIh6TEtntI9pgb4LuPtEsfmlMxyEnROXxwVz_uP1swuvV5573_sw/exec', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Form submitted successfully!');
+            })
+            .catch(error => {
+                alert('Error submitting form!');
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
